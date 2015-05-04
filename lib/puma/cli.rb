@@ -33,7 +33,7 @@ module Puma
     # this object will report status on.
     #
     def initialize(argv, events=Events.stdio)
-      @debug = false
+      @debug = true
       @argv = argv
 
       @events = events

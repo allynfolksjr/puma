@@ -33,6 +33,7 @@ module Puma
       @stderr.sync = true
 
       @debug = ENV.key? 'PUMA_DEBUG'
+      log "PUMA DEBUG ENABLED" if @debug
 
       @on_booted = []
 
