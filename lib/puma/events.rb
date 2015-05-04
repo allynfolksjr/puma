@@ -33,7 +33,6 @@ module Puma
       @stderr.sync = true
 
       @debug = ENV.key? 'PUMA_DEBUG'
-      debug "PUMA DEBUG ENABLED"
 
       @on_booted = []
 
@@ -66,11 +65,11 @@ module Puma
     # Write +str+ to +@stdout+
     #
     def log(str)
-      @stdout.puts format(str)
+      puts format(str)
     end
 
     def write(str)
-      @stdout.write format(str)
+      write format(str)
     end
 
     def debug(str)
@@ -80,7 +79,7 @@ module Puma
     # Write +str+ to +@stderr+
     #
     def error(str)
-      @stderr.puts format("ERROR: #{str}")
+      puts format("ERROR: #{str}")
       exit 1
     end
 

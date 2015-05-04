@@ -40,11 +40,9 @@ module Puma
 
       @clean_thread_locals = false
 
-
-      # Debug per https://github.com/puma/puma/issues/691#issue-69689499
       Thread.new do
         while true
-          puts "Threads for #{Process.pid}: #{@workers.size}. Backlog: #{backlog}. Raw backlog: #{@todo}"
+          puts "Threads for #{Process.pid}: #{@workers.size}. Backlog: #{backlog}."
           sleep 5
         end
       end
