@@ -11,6 +11,7 @@ module Puma
 
       @phased_state = :idle
       @phased_restart = false
+      puts "PUMA DEBUG: Cluster #{Process.pid} initialized"
     end
 
     def stop_workers
@@ -37,9 +38,9 @@ module Puma
     end
 
     def redirect_io
-      super
+      # super
 
-      @workers.each { |x| x.hup }
+      # @workers.each { |x| x.hup }
     end
 
     class Worker
@@ -52,6 +53,7 @@ module Puma
         @options = options
         @first_term_sent = nil
         @last_checkin = Time.now
+        puts "PUMA DEBUG: Worker #{@pid} initialized"
       end
 
       attr_reader :index, :pid, :phase, :signal, :last_checkin
@@ -427,7 +429,7 @@ module Puma
             check_workers force_check
 
             @workers.each do |worker|
-              log "Index: #{worker.index} | PID: #{worker.pid} | Phase: #{worker.phase} | Signal: #{worker.signal} | last_checkin: #{worker.last_checkin}"
+              puts "PUMA DEBUG: Worker PID: #{worker.pid} | Index: #{worker.index} | Phase: #{worker.phase} | Signal: #{worker.signal} | last_checkin: #{worker.last_checkin}"
             end
 
           rescue Interrupt
