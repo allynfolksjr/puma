@@ -39,6 +39,15 @@ module Puma
       end
 
       @clean_thread_locals = false
+
+
+      # Debug per https://github.com/puma/puma/issues/691#issue-69689499
+      Thread.new do
+        while true
+          puts "Threads #{@workers.size} #{@workers.select{|x| x.alive?}.size}"
+          sleep 5
+        end
+      end
     end
 
     attr_reader :spawned, :trim_requested
@@ -198,7 +207,7 @@ module Puma
       # Use this instead of #each so that we don't stop in the middle
       # of each and see a mutated object mid #each
       if !@workers.empty?
-          @workers.first.join until @workers.empty?
+        @workers.first.join until @workers.empty?
       end
 
       @spawned = 0
