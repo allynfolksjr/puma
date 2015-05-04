@@ -65,7 +65,7 @@ module Puma
     # Write +str+ to +@stdout+
     #
     def log(str)
-      @stdout.puts format(str)
+      @stdout.puts "PUMA DEBUG: #{str}"
     end
 
     def write(str)
