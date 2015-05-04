@@ -65,21 +65,21 @@ module Puma
     # Write +str+ to +@stdout+
     #
     def log(str)
-      puts format(str)
+      @stdout.puts format(str)
     end
 
     def write(str)
-      write format(str)
+      @stdout.write format(str)
     end
 
     def debug(str)
-      log("PUMA DEBUG #{str}")
+      log("% #{str}") if @debug
     end
 
     # Write +str+ to +@stderr+
     #
     def error(str)
-      puts format("ERROR: #{str}")
+      @stderr.puts format("ERROR: #{str}")
       exit 1
     end
 
