@@ -42,7 +42,7 @@ module Puma
 
       Thread.new do
         while true
-          puts "PUMA DEBUG: Threads for worker #{Process.pid}: #{@workers.size}. Backlog: #{backlog}.\n"
+          puts "PUMA DEBUG: Threads for worker #{Process.pid}: #{@workers.size}. Alive: #{@workers.select{|x| x.alive?}.size}. Backlog: #{backlog}.\n"
           sleep 5
         end
       end
