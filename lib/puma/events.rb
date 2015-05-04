@@ -33,7 +33,7 @@ module Puma
       @stderr.sync = true
 
       @debug = ENV.key? 'PUMA_DEBUG'
-      log "PUMA DEBUG ENABLED" if @debug
+      debug "PUMA DEBUG ENABLED"
 
       @on_booted = []
 
@@ -74,7 +74,7 @@ module Puma
     end
 
     def debug(str)
-      log("% #{str}") if @debug
+      log("PUMA DEBUG #{str}")
     end
 
     # Write +str+ to +@stderr+

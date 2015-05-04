@@ -15,7 +15,7 @@ module Puma
 
     def stop_workers
       log "- Gracefully shutting down workers..."
-      @workers.each { |x| x.term }
+      @workers.each { |x| x.term; log("TERMINATING worker #{x}") }
 
       begin
         Process.waitall
@@ -74,6 +74,7 @@ module Puma
       end
 
       def term
+        log "Worker #{@pid} received SIGTERM"
         begin
           if @first_term_sent && (Time.new - @first_term_sent) > @options[:worker_shutdown_timeout]
             @signal = "KILL"
@@ -87,11 +88,13 @@ module Puma
       end
 
       def kill
+          log "Worker #{@pid} received SIGKILL"
         Process.kill "KILL", @pid
       rescue Errno::ESRCH
       end
 
       def hup
+          log "Worker #{@pid} received SIGHUP"
         Process.kill "HUP", @pid
       rescue Errno::ESRCH
       end
@@ -102,12 +105,14 @@ module Puma
 
       master = Process.pid
 
+      log "Spawning #{diff} workers from master process #{master}" unless diff == 0
+
       diff.times do
         idx = next_worker_index
         @options[:before_worker_fork].each { |h| h.call(idx) }
 
         pid = fork { worker(idx, master) }
-        @cli.debug "Spawned worker: #{pid}"
+        log "Spawned worker: #{pid}"
         @workers << Worker.new(idx, pid, @phase, @options)
         @options[:after_worker_boot].each { |h| h.call }
       end
@@ -129,6 +134,7 @@ module Puma
     end
 
     def check_workers(force=false)
+
       return if !force && @next_check && @next_check >= Time.now
 
       @next_check = Time.now + 5
@@ -419,6 +425,10 @@ module Puma
             end
 
             check_workers force_check
+
+            @workers.each do |worker|
+              log "Index: #{worker.index} | PID: #{worker.pid} | Phase: #{worker.phase} | Signal: #{worker.signal} | last_checkin: #{worker.last_checkin}"
+            end
 
           rescue Interrupt
             @status = :stop

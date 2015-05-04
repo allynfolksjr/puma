@@ -125,10 +125,12 @@ module Puma
     end
 
     def backlog
+      log "Backlog: #{@thread_pool.backlog}"
       @thread_pool and @thread_pool.backlog
     end
 
     def running
+      log "Running: #{@thread_pool.spawned}"
       @thread_pool and @thread_pool.spawned
     end
 
@@ -481,6 +483,7 @@ module Puma
     #
     def handle_request(req, lines)
       env = req.env
+
       client = req.io
 
       normalize_env env, client

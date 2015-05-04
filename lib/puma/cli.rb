@@ -152,6 +152,7 @@ module Puma
     end
 
     def restart!
+
       @options[:on_restart].each do |block|
         block.call self
       end
